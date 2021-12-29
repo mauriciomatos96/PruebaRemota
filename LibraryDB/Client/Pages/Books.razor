@@ -1,0 +1,54 @@
+﻿@page "/books"
+@inject IBookService BookService
+@inject NavigationManager NavigationManager
+<h3>Books</h3>
+
+@if(books.Count == 0)
+{
+    <span>Loading Books</span>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Author</th>
+            <th>Year</th>
+            <th></th>
+        </thead>
+        <tbody>
+            @foreach (var book in books)
+            {
+            <tr>
+                <td>@book.Title</td>
+                <td>@book.Description</td>
+                <td>@book.Author</td>
+                <td>@book.Year</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="(() => ShowBook(book.Id))">Show</button>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<EditBook></EditBook>
+
+
+@code {      
+    List<LibraryDB.Shared.Book> books = new List<LibraryDB.Shared.Book>();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        books = await BookService.GetBooks();
+
+    }
+
+    void ShowBook(int id)
+    {
+        NavigationManager.NavigateTo($"book/{id}");
+    }
+}

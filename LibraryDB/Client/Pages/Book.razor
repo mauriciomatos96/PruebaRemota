@@ -1,0 +1,26 @@
+﻿@page "/book/{id:int}"
+@inject IBookService BookService
+
+@if(book == null)
+{
+    <span>The book is loading</span>
+}
+else
+{
+    <h3>The Book is @book.Title, it's about @book.Description, writed by @book.Author and published in @book.Year</h3>
+}
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    LibraryDB.Shared.Book book = null;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        book = await BookService.GetBook(Id);
+
+    }
+}
